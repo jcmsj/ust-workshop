@@ -1,0 +1,12 @@
+User-agent: *
+Allow: /
+Allow: /articles/*
+Allow: /articles/about
+
+# Prevent indexing of private areas
+Disallow: /app/*
+Disallow: /admin/*
+
+# Sitemap location
+Sitemap: https://hipandvalley.com/sitemap.xml
+  
