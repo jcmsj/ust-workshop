@@ -112,10 +112,10 @@ class UserReserve extends Page implements HasForms
                                             ->afterStateUpdated(fn($state) => $this->data['total_cost'] = $state * app(LeadSettings::class)->cost_per_lead),
                                         Placeholder::make('cost_per_lead')
                                             ->label('Cost per lead')
-                                            ->content(fn() => "CA$" . app(LeadSettings::class)->cost_per_lead),
+                                            ->content(fn() => "PHP" . app(LeadSettings::class)->cost_per_lead),
                                         Placeholder::make('total_cost')
                                             ->label('Total Cost')
-                                            ->content(fn() => "CA$" . ($this->data['total_cost'] ?? 0)),
+                                            ->content(fn() => "PHP" . ($this->data['total_cost'] ?? 0)),
                                     ])->columnSpan(1),
                                     Grid::make(1)->schema([
                                         Textarea::make('payment_details')

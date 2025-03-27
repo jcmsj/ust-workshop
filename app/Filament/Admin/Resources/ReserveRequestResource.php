@@ -54,7 +54,7 @@ class ReserveRequestResource extends Resource
 
     public static function table(Table $table): Table
     {
-        
+
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('user.name')
@@ -63,14 +63,15 @@ class ReserveRequestResource extends Resource
                     ->label('Requester'),
                 Tables\Columns\TextColumn::make('count')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('total_cost')
-                    ->money('CAD')
-                    ->sortable(query: function ($query, string $direction) {
-                        return $query->orderBy(
-                            DB::raw('count * cost_per_lead'),
-                            $direction
-                        );
-                    }),
+                Tables\Columns\TextColumn::make('cost_per_lead')
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('cost_per_lead')
+                    ->money('PH')
+                    // column: total_cost = count * cost_per_lead
+                    ->formatStateUsing(fn($state, $record) => DB::table('reserve_requests')
+                        ->where('id', $record->id)
+                        ->value('count') * $state)
+                    ->label('Total Cost'),
                 Tables\Columns\TextColumn::make('status')
                     ->sortable()
                     ->badge()
@@ -131,7 +132,6 @@ class ReserveRequestResource extends Resource
                         ->action(fn(Collection $records) => $records->each->accept()),
                 ]),
             ]);
-            
     }
 
     public static function getRelations(): array

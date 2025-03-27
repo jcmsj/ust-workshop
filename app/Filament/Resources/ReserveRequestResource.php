@@ -103,10 +103,10 @@ class ReserveRequestResource extends Resource
                     ->sortable()
                     ->visible(fn () => auth()->user()->is_admin),
                 Tables\Columns\TextColumn::make('cost_per_lead')
-                    ->money('CAD')
+                    ->money('PH')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('total_cost')
-                    ->money('CAD'),
+                    ->money('PH'),
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('status')
@@ -175,9 +175,9 @@ class ReserveRequestResource extends Resource
                     ->dateTime()
                     ->visible(fn () => auth()->user()->is_admin),
                 TextEntry::make('cost_per_lead')
-                    ->money('CAD'),
+                    ->money('PH'),
                 TextEntry::make('total_cost')
-                    ->money('CAD'),
+                    ->money('PH'),
             ]);
     }
 

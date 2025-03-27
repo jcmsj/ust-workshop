@@ -39,7 +39,7 @@ class RegistrationPaymentRelationManager extends RelationManager
                 Infolists\Components\Section::make('Payment Information')
                     ->schema([
                         Infolists\Components\TextEntry::make('amount_due')
-                            ->money('CAD'),
+                            ->money('PH'),
                         Infolists\Components\TextEntry::make('created_at')
                             ->dateTime(),
                         Infolists\Components\TextEntry::make('payment_details')
@@ -54,7 +54,7 @@ class RegistrationPaymentRelationManager extends RelationManager
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('amount_due')
-                    ->money('CAD'),
+                    ->money('PH'),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime(),
             ])

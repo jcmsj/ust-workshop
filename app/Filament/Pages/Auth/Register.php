@@ -34,7 +34,7 @@ class Register extends BaseRegister
                             $this->getPasswordConfirmationFormComponent()->columnSpanFull(),
                             Placeholder::make('amount_due')
                                 ->label('Amount Due')
-                                ->content('CA$ ' . $registrationPaymentAmountDue),
+                                ->content('PHP ' . $registrationPaymentAmountDue),
                             TextInput::make('payment_details')
                                 ->label('Payment Details')
                                 ->columnSpanFull()

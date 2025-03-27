@@ -22,7 +22,7 @@ class ManageRegistration extends SettingsPage
                 // ...
                 Forms\Components\TextInput::make('payment_amount_due')
                 ->label('Registration Payment Amount Due')
-                ->prefix('CA$')
+                ->prefix('PHP')
                 ->required()
                 ->numeric(),
             ]);

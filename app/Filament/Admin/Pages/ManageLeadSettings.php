@@ -19,7 +19,7 @@ class ManageLeadSettings extends SettingsPage
             ->schema([
                 Forms\Components\TextInput::make('cost_per_lead')
                     ->numeric()
-                    ->prefix('CA$')
+                    ->prefix('PHP')
                     ->minValue(0)
                     ->required(),
             ]);

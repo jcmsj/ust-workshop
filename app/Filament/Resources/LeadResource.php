@@ -65,19 +65,24 @@ class LeadResource extends Resource
                             Select::make('province_territory')
                                 ->label('Province/Territory')
                                 ->options([
-                                    'Alberta' => 'Alberta',
-                                    'British Columbia' => 'British Columbia',
-                                    'Manitoba' => 'Manitoba',
-                                    'New Brunswick' => 'New Brunswick',
-                                    'Newfoundland' => 'Newfoundland',
-                                    'Northwest Territories' => 'Northwest Territories',
-                                    'Nova Scotia' => 'Nova Scotia',
-                                    'Nunavut' => 'Nunavut',
-                                    'Ontario' => 'Ontario',
-                                    'Prince Edward Island' => 'Prince Edward Island',
-                                    'Quebec' => 'Quebec',
-                                    'Saskatchewan' => 'Saskatchewan',
-                                    'Yukon' => 'Yukon',
+                                    // PH locations
+                                    'NCR' => 'NCR (National Capital Region)',
+                                    'CAR' => 'CAR (Cordillera Administrative Region)',
+                                    'Region I' => 'Region I (Ilocos Region)',
+                                    'Region II' => 'Region II (Cagayan Valley)',
+                                    'Region III' => 'Region III (Central Luzon)',
+                                    'Region IV-A' => 'Region IV-A (CALABARZON)',
+                                    'Region IV-B' => 'Region IV-B (MIMAROPA)',
+                                    'Region V' => 'Region V (Bicol Region)',
+                                    'Region VI' => 'Region VI (Western Visayas)',
+                                    'Region VII' => 'Region VII (Central Visayas)',
+                                    'Region VIII' => 'Region VIII (Eastern Visayas)',
+                                    'Region IX' => 'Region IX (Zamboanga Peninsula)',
+                                    'Region X' => 'Region X (Northern Mindanao)',
+                                    'Region XI' => 'Region XI (Davao Region)',
+                                    'Region XII' => 'Region XII (SOCCSKSARGEN)',
+                                    'Region XIII' => 'Region XIII (Caraga)',
+                                    'BARMM' => 'BARMM (Bangsamoro Autonomous Region in Muslim Mindanao)',
                                 ])
                                 ->searchable()
                                 ->required(),
@@ -188,7 +193,9 @@ class LeadResource extends Resource
                             TextInput::make('mobile_number')
                                 ->label('Mobile Number')
                                 ->tel()
-                                ->telRegex('/^(\+?1\s?)?\(?([0-9]{3})\)?[-.\s]?([0-9]{3})[-.\s]?([0-9]{4})$/')
+                                ->hint('Format: +639XXXXXXXXX')
+                                // PH format
+                                ->telRegex('/^\+639\d{9}$/')
                                 ->required(),
                             TextInput::make('email')
                                 ->label('Email')
@@ -209,7 +216,7 @@ class LeadResource extends Resource
                 Placeholder::make("Agreement")->hiddenLabel()->content(new HtmlString(Blade::render(
                     <<<BLADE
                         <div class="mt-4 text-sm text-justify text-gray-600 max-w-lg">
-                        By clicking "Submit Quote" you grant "Hip&Valley Financial Solutions" expressed written consent that we may contact
+                        By clicking "Submit Quote" you grant "Leads CRM+" expressed written consent that we may contact
                         you to discuss your insurance options. This does not constitute an insurance application. You are under no obligation to purchase a policy. We respect your privacy, and the information provided will never be shared
                         with anyone.
                         </div>
