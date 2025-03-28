@@ -1,4 +1,4 @@
-<p align="center"><a href="https://computradetech.com.ph/" target="_blank"><img src="https://computradetech.com/wp-content/uploads/2023/03/New-Logo-CTP-01.png" width="400" alt="CTP Logo"></a></p>
+<p align="center"><a href="https://computradetech.com.ph/" target="_blank"><img src="./public/CTP-logo.png" width="400" alt="CTP Logo"></a></p>
 
 # **SimpleCRM**
 
@@ -37,7 +37,7 @@ A lightweight yet powerful Customer Relationship Management (CRM) application de
 
 ### Creating RDS via Easy Create
 
-    **PostgreSQL**
+    PostgreSQL
         - Free-Tier
         - DB-Instance Name = fil
         - Password = rootrootroot (subject to change)
