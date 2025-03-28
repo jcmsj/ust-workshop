@@ -96,20 +96,6 @@ return [
             'search_path' => 'public',
             'sslmode' => 'prefer',
         ],
-        'pgsql-cache' => [
-            'driver' => 'pgsql',
-            'url' => env('DB_CACHE_URL'),
-            'host' => env('DB_CACHE_HOST', '127.0.0.1'),
-            'port' => env('DB_CACHE_PORT', '5432'),
-            'database' => env('DB_CACHE_DATABASE', 'laravel'),
-            'username' => env('DB_CACHE_USERNAME', 'root'),
-            'password' => env('DB_CACHE_PASSWORD', ''),
-            'charset' => env('DB_CACHE_CHARSET', 'utf8'),
-            'prefix' => '',
-            'prefix_indexes' => true,
-            'search_path' => 'public',
-            'sslmode' => 'prefer',
-        ],
 
         'sqlsrv' => [
             'driver' => 'sqlsrv',
