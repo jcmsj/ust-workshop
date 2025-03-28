@@ -23,8 +23,8 @@ A lightweight yet powerful Customer Relationship Management (CRM) application de
 
 ### EC2 Provisioning Pre-requisites
 
--   PHP 8.3,
--   Composer, and
+-   PHP 8.3
+-   Composer
 -   Node.js
 
 -   php artisan key:generate
@@ -32,12 +32,12 @@ A lightweight yet powerful Customer Relationship Management (CRM) application de
 #### Security Groups:
 
     - Application Load Balancer: ALLOW Inbound Traffic to TCP 80 anywhere IPv4
-       - **Link it to** -> **App Security Group**: ALLOW Inbound Traffic from ALB SG (All Traffic)
-            - **Link it to** -> **RDS Security Group**: ALLOW PostgreSQL 5432 from App Security Group
+       - Link it to -> App Security Group: ALLOW Inbound Traffic from ALB SG (All Traffic)
+            - Link it to -> RDS Security Group: ALLOW PostgreSQL 5432 from App Security Group
 
 ### Creating RDS via Easy Create
 
-    - PostgreSQL
+    **PostgreSQL**
         - Free-Tier
         - DB-Instance Name = fil
         - Password = rootrootroot (subject to change)
