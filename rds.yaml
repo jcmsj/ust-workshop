@@ -1,0 +1,45 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: "CloudFormation StackSet for RDS instance using dynamic default VPC parameters"
+
+Parameters:
+  VpcId:
+    Type: AWS::EC2::VPC::Id
+    Description: "Select the default VPC ID for this region/account"
+  SubnetIds:
+    Type: List<AWS::EC2::Subnet::Id>
+    Description: "Select the subnets in the default VPC for the RDS DBSubnetGroup"
+
+Resources:
+  USTWorkshopDBInstance:
+    Type: "AWS::RDS::DBInstance"
+    Properties:
+      DBInstanceIdentifier: "ctp"
+      Engine: "postgres"
+      DBInstanceClass: "db.t4g.micro"
+      AllocatedStorage: "20"
+      MasterUsername: "root"
+      MasterUserPassword: "ustworkshop"
+      BackupRetentionPeriod: 7
+      PubliclyAccessible: false
+      MultiAZ: false
+      DBSubnetGroupName: !Ref MyDBSubnetGroup
+      VPCSecurityGroups:
+        - !GetAtt RDSSecurityGroup.GroupId
+
+  MyDBSubnetGroup:
+    Type: "AWS::RDS::DBSubnetGroup"
+    Properties:
+      DBSubnetGroupDescription: "Subnet group for RDS in the default VPC"
+      SubnetIds: !Ref SubnetIds
+
+  RDSSecurityGroup:
+    Type: "AWS::EC2::SecurityGroup"
+    Properties:
+      GroupName: "RDS Security Group"
+      GroupDescription: "Allow RDS access"
+      VpcId: !Ref VpcId
+      SecurityGroupIngress:
+        - IpProtocol: "tcp"
+          FromPort: 3306
+          ToPort: 3306
+          CidrIp: "10.0.0.0/16"
