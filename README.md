@@ -21,6 +21,13 @@ A lightweight yet powerful Customer Relationship Management (CRM) application de
 
 ## **Installation & Setup**
 
+### Creating RDS via Easy Create (Estimated Provision Time: 5 Minutes)
+
+    PostgreSQL
+        - Free-Tier
+        - DB-Instance Name = fil
+        - Password = rootrootroot (subject to change)
+
 ### EC2 Provisioning Pre-requisites
 
 -   PHP 8.3
@@ -34,13 +41,6 @@ A lightweight yet powerful Customer Relationship Management (CRM) application de
     - Application Load Balancer: ALLOW Inbound Traffic to TCP 80 anywhere IPv4
        - Link it to -> App Security Group: ALLOW Inbound Traffic from ALB SG (All Traffic)
             - Link it to -> RDS Security Group: ALLOW PostgreSQL 5432 from App Security Group
-
-### Creating RDS via Easy Create
-
-    PostgreSQL
-        - Free-Tier
-        - DB-Instance Name = fil
-        - Password = rootrootroot (subject to change)
 
 ---
 
