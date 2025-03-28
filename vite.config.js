@@ -4,7 +4,7 @@ import laravel, { refreshPaths } from 'laravel-vite-plugin'
 export default defineConfig({
     plugins: [
         laravel({
-            input: ['resources/css/app.css', 'resources/js/app.js', 'resources/css/filament/app/theme.css', 'resources/css/filament/admin/theme.css', 'resources/js/tiptap/extensions.js', 
+            input: ['resources/css/app.css', 'resources/js/app.js', 'resources/css/filament/app/theme.css', 'resources/css/filament/admin/theme.css', 
                 // I've not made this file yet, but if i add more extensions that need css, I'll add them here
                 // 'resources/css/tiptap/extensions.css',
             ],
