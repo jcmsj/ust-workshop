@@ -97,7 +97,7 @@ export COMPOSER_HOME=/home/ubuntu/.composer
 cd /var/www/ust-workshop
 composer install
 php artisan key:generate
-php artisan migrate:fresh --seed
+php artisan migrate:fresh --seed --force
 php artisan config:cache
 npm install
 npm run build

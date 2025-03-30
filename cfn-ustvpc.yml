@@ -1,6 +1,6 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Description: >
-  VPC stack with 3-tier architecture (public, application private, and single database private subnet),
+  VPC stack with 3-tier architecture (2 public subnets, 2 application private subnets, and 2 database private subnets),
   Internet Gateway, NAT Gateway, and basic Security Groups for ALB, EC2, and RDS.
   
 Parameters:
@@ -14,25 +14,36 @@ Parameters:
     Default: 10.0.0.0/16
     Description: CIDR block for the VPC
 
+  # Two Public Subnets – one per AZ
   PublicSubnet1Cidr:
     Type: String
     Default: 10.0.1.0/24
+    Description: CIDR block for Public Subnet in AZ1
 
   PublicSubnet2Cidr:
     Type: String
-    Default: 10.0.2.0/24
+    Default: 10.0.6.0/24
+    Description: CIDR block for Public Subnet in AZ2
 
   AppPrivateSubnet1Cidr:
     Type: String
-    Default: 10.0.3.0/24
+    Default: 10.0.2.0/24
+    Description: CIDR block for Application Private Subnet in AZ1
 
   AppPrivateSubnet2Cidr:
     Type: String
-    Default: 10.0.4.0/24
+    Default: 10.0.3.0/24
+    Description: CIDR block for Application Private Subnet in AZ2
 
-  DbPrivateSubnetCidr:
+  DbPrivateSubnet1Cidr:
+    Type: String
+    Default: 10.0.4.0/24
+    Description: CIDR block for Database Private Subnet in AZ1
+
+  DbPrivateSubnet2Cidr:
     Type: String
     Default: 10.0.5.0/24
+    Description: CIDR block for Database Private Subnet in AZ2
 
 Resources:
   ############################################
@@ -73,7 +84,7 @@ Resources:
       AvailabilityZone: !Select [ 0, !GetAZs '' ]
       Tags:
         - Key: Name
-          Value: !Sub "${EnvironmentName}-PublicSubnet1"
+          Value: !Sub "${EnvironmentName}-PublicSubnet"
 
   PublicSubnet2:
     Type: AWS::EC2::Subnet
@@ -115,7 +126,7 @@ Resources:
       RouteTableId: !Ref PublicRouteTable
 
   ############################################
-  # NAT Gateway in Public Subnet 1
+  # NAT Gateway in PublicSubnet1
   ############################################
   NATEIP:
     Type: AWS::EC2::EIP
@@ -186,17 +197,27 @@ Resources:
       RouteTableId: !Ref AppPrivateRouteTable
 
   ############################################
-  # Private Subnet for Database Tier (single subnet)
+  # Private Subnets for Database Tier (2 AZs)
   ############################################
-  DbPrivateSubnet:
+  DbPrivateSubnet1:
     Type: AWS::EC2::Subnet
     Properties:
       VpcId: !Ref VPC
-      CidrBlock: !Ref DbPrivateSubnetCidr
+      CidrBlock: !Ref DbPrivateSubnet1Cidr
       AvailabilityZone: !Select [ 0, !GetAZs '' ]
       Tags:
         - Key: Name
           Value: !Sub "${EnvironmentName}-DbPrivateSubnet"
+
+  DbPrivateSubnet2:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      CidrBlock: !Ref DbPrivateSubnet2Cidr
+      AvailabilityZone: !Select [ 1, !GetAZs '' ]
+      Tags:
+        - Key: Name
+          Value: !Sub "${EnvironmentName}-DbPrivateSubnet2"
 
   DbPrivateRouteTable:
     Type: AWS::EC2::RouteTable
@@ -213,11 +234,29 @@ Resources:
       DestinationCidrBlock: 0.0.0.0/0
       NatGatewayId: !Ref NATGateway
 
-  DbPrivateSubnetAssociation:
+  DbPrivateSubnetAssociation1:
     Type: AWS::EC2::SubnetRouteTableAssociation
     Properties:
-      SubnetId: !Ref DbPrivateSubnet
+      SubnetId: !Ref DbPrivateSubnet1
       RouteTableId: !Ref DbPrivateRouteTable
+
+  DbPrivateSubnetAssociation2:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref DbPrivateSubnet2
+      RouteTableId: !Ref DbPrivateRouteTable
+
+  ############################################
+  # RDS DB Subnet Group
+  ############################################
+  DBSubnetGroup:
+    Type: AWS::RDS::DBSubnetGroup
+    Properties:
+      DBSubnetGroupDescription: "Subnet group for RDS instances in the Workshop environment"
+      SubnetIds:
+        - !Ref DbPrivateSubnet1
+        - !Ref DbPrivateSubnet2
+      DBSubnetGroupName: !Sub "${EnvironmentName}-DBSubnetGroup"
 
   ############################################
   # Security Groups
@@ -297,9 +336,13 @@ Outputs:
     Description: Application Private Subnet 2 ID
     Value: !Ref AppPrivateSubnet2
 
-  DbPrivateSubnetId:
-    Description: Database Private Subnet ID
-    Value: !Ref DbPrivateSubnet
+  DbPrivateSubnet1Id:
+    Description: Database Private Subnet 1 ID
+    Value: !Ref DbPrivateSubnet1
+
+  DbPrivateSubnet2Id:
+    Description: Database Private Subnet 2 ID
+    Value: !Ref DbPrivateSubnet2
 
   ALBSecurityGroupId:
     Description: ALB Security Group ID
