@@ -82,8 +82,8 @@ composer install
 composer update
 
 # Run database migrations and seed the database (if desired)
-yes | php artisan migrate:fresh --seed
-
+yes | php artisan migrate --force 
+php artisan db:seed --force
 # Generate application key (if not already set)
 php artisan key:generate
 
