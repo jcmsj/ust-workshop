@@ -3,7 +3,7 @@
 sudo -i
 
 set -e
-
+exec > /var/log/user-data.log 2>&1
 # Update package lists and install Git, curl, build-essential, and Apache
 apt-get update -y
 apt-get install -y git curl build-essential apache2
@@ -13,8 +13,8 @@ a2enmod rewrite
 
 # Install PHP 8.3 and required extensions (including intl and zip)
 add-apt-repository ppa:ondrej/php -y
-apt-get update -y
-apt-get install -y \
+apt update -y
+apt install -y \
     php8.3 \
     php8.3-cli \
     php8.3-fpm \
@@ -26,38 +26,34 @@ apt-get install -y \
     php8.3-curl \
     libapache2-mod-php8.3 
 
-# Install Composer
-EXPECTED_SIGNATURE="$(curl -s https://composer.github.io/installer.sig)"
-php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-ACTUAL_SIGNATURE="$(php -r "echo hash_file('sha384', 'composer-setup.php');")"
-if [ "$EXPECTED_SIGNATURE" != "$ACTUAL_SIGNATURE" ]; then
-    >&2 echo 'ERROR: Invalid Composer installer signature'
-    rm composer-setup.php
-    exit 1
-fi
-php composer-setup.php --install-dir=/usr/local/bin --filename=composer
-rm composer-setup.php
+# Composer
+apt install -y composer;
 
-# Install Node.js (using NodeSource for Node.js 18)
-curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
-apt-get install -y nodejs
+# Node 22
+curl -sL https://deb.nodesource.com/setup_22.x -o nodesource_setup.sh;
+bash nodesource_setup.sh;
+apt install -y nodejs;
 
 # Clone your TALL stack application repository
 cd /var/www
 if [ -d "ust-workshop" ]; then
-    echo "Removing existing ust-workshop directory"
-    rm -rf ust-workshop
+    echo "Removing existing ust-workshop directory";
+    rm -rf ust-workshop;
 fi
-echo "Cloning repository..."
-git clone https://github.com/jcmsj/ust-workshop ust-workshop
-cd ust-workshop
+
+# Set the HOME environment variable to the home directory of the user running the script
+export HOME=~;
+
+echo "Cloning repository...";
+git clone https://github.com/jcmsj/ust-workshop ust-workshop;
+cd ust-workshop;
 
 # Add this directory to Git's safe.directory configuration so Git won't complain about ownership
-git config --global --add safe.directory /var/www/ust-workshop
+git config --global --add safe.directory /var/www/ust-workshop;
 
 # If .env doesn't exist, copy .env.example
 if [ ! -f .env ]; then
-    cp .env.example .env
+    cp .env.example .env;
 fi
 
 # Update the .env file with the RDS details:
@@ -66,30 +62,22 @@ sed -i 's/DB_DATABASE=fil/DB_DATABASE=ctp/g' .env
 sed -i 's/DB_USERNAME=root/DB_USERNAME=root/g' .env
 sed -i 's/^DB_PASSWORD=.*/DB_PASSWORD=ustworkshop/' .env
 
-# Change ownership of the project directory to the ubuntu user so Composer can write to it
-chown -R ubuntu:ubuntu /var/www/ust-workshop
-
-# Exit from root to run Composer as ubuntu
-exit
-
-# Now, as the ubuntu user, change to the project directory
-cd /var/www/ust-workshop
+cd /var/www/ust-workshop;
 
 # Install PHP dependencies with Composer
-composer install
-
-# Composer update (optional if you already have a lock file)
-composer update
+composer install --no-interaction;
 
 # Run database migrations and seed the database (if desired)
 yes | php artisan migrate --force 
-php artisan db:seed --force
+# if this is the 2nd instance,  errors will appear since we already seeded (SQLSTATE[23505], duplicate records), just ignore
+php artisan db:seed || true;
+echo "Database seeded";
+
 # Generate application key (if not already set)
 php artisan key:generate
 
 # Clear and cache the Laravel configuration to pick up .env changes
 php artisan config:cache
-
 
 # Install Node dependencies
 npm install
@@ -97,8 +85,8 @@ npm install
 # Run npm production build for frontend assets
 npm run build
 
-# Go back to root
-sudo -i
+# Change ownership of the project directory to the ubuntu user so Composer can write to it
+chown -R ubuntu:ubuntu /var/www/ust-workshop;
 
 # Now that everything is built, fix permissions for storage and cache
 chown -R www-data:www-data /var/www/ust-workshop/storage /var/www/ust-workshop/bootstrap/cache
