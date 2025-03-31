@@ -36,8 +36,8 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
-            ->brandLogo("/LEADS.webp")
-            ->brandLogoHeight('3rem')
+            ->brandLogo("/CTP-02.png")
+            ->brandLogoHeight('6rem')
             ->colors([
                 'primary' => Color::Amber,
             ])

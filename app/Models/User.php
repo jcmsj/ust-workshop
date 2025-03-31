@@ -156,8 +156,12 @@ class User extends Authenticatable implements
         return !is_null($this->approved_at);
     }
 
-    public function setIsApprovedAttribute(bool $value)
+    public function setIsApprovedAttribute(?bool $value)
     {
+        if ($value === null) {
+            // don't change
+            return;
+        }
         $this->approved_at = $value ? now() : null;
         $this->save();
     }

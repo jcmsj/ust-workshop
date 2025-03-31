@@ -56,8 +56,9 @@
           </label>
         </div>
         <div class="flex-1 hidden xl:flex items-center">
-          <a class="btn btn-ghost text-xl" href="{{ route('home') }}">
-            <img src="/LEADS.webp" alt="Hip and valley financial solutions full logo" class="h-14" />
+          <a class="btn btn-ghost text-xl h-max" href="{{ route('home') }}">
+            <img src="/CTP-logo.png" alt="Hip and valley financial solutions full logo" class="h-14" />
+            <img src="/LEADS.webp" alt="Hip and valley financial solutions full logo" class="h-10" />
           </a>
         </div>
       </div>

@@ -12,7 +12,7 @@ class CreateLeadTable extends Migration
             $table->id();
             $table->string('insurance_type')->nullable();
             $table->string('province_territory')->nullable();
-            $table->date('birthdate')->nullable();
+            $table->date('birthdate');
             $table->string('sex')->nullable();
             $table->decimal('desired_amount', 15, 2)->nullable();
             $table->integer('length_coverage')->nullable();

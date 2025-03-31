@@ -13,7 +13,7 @@ class EmailController extends Controller
         $leadAssignemnt = LeadAssignment::with('lead')->find(1);
     
         $prefixes = [
-            'desired_amount' => '$',
+            'desired_amount' => '₱',
         ];
     
         $suffixes = [

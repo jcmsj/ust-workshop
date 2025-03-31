@@ -65,8 +65,7 @@ class KanbanSeeder extends Seeder
             foreach ($lists as $listData) {
                 $list = KanList::create($listData);
 
-                // Create up to 10 tasks for each list (random number between 5-10)
-                $taskCount = rand(5, 10);
+                $taskCount = rand(3, 8);
                 $tasks = [];
 
                 for ($i = 1; $i <= $taskCount; $i++) {

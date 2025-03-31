@@ -23,8 +23,8 @@ class UserSeeder extends Seeder
 
         $faker = Faker::create();
 
-        // Create 20 accounts
-        for ($i = 1; $i <= 20; $i++) {
+        // Create 10 accounts
+        for ($i = 1; $i <= 10; $i++) {
             $paddedNumber = str_pad($i, 2, '0', STR_PAD_LEFT);
             User::factory()->create([
                 'first_name' => $faker->firstName,

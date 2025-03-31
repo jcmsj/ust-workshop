@@ -46,8 +46,8 @@ class AppPanelProvider extends PanelProvider
             ->registration()
             ->passwordReset()
             ->emailVerification()
-            ->brandLogo("/LEADS.webp")
-            ->brandLogoHeight('3rem')
+            ->brandLogo("/CTP-02.png")
+            ->brandLogoHeight('6rem')
             ->viteTheme('resources/css/filament/app/theme.css')
             ->viteTheme('resources/css/app.css')
             ->colors([

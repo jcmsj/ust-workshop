@@ -15,7 +15,7 @@ class LeadSeeder extends Seeder
     public function run(): void
     {
         $leads = [];
-        for ($i = 0; $i < 90; $i++) {
+        for ($i = 0; $i < 20; $i++) {
             $leads[] = [
                 'created_at' => Carbon::now()->subDays(rand(1, 30))->subHours(rand(0, 23))->subMinutes(rand(0, 59))->subSeconds(rand(0, 59)),
             ];

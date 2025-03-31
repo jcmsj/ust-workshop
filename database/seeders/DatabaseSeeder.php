@@ -22,7 +22,6 @@ class DatabaseSeeder extends Seeder
             ReserveRequestSeeder::class,
             LeadAssignmentSeeder::class,
             NotesSeeder::class,
-            ArticleSeeder::class,
             KanbanSeeder::class,
         ]);
     }

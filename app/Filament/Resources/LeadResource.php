@@ -35,193 +35,161 @@ class LeadResource extends Resource
     {
         return $form
             ->schema([
-                Wizard::make([
-                    Step::make('Insurance Info')
-                        ->schema([
-                            Select::make('insurance_type')
-                                ->label('Life Insurance Quotes')
-                                ->options([
-                                    'Term Life Insurance' => 'Term Life Insurance (popular)',
-                                    'Mortgage Protection Insurance' => 'Mortgage Protection Insurance',
-                                    'Whole Life Insurance' => 'Whole Life Insurance',
-                                    'Universal Life Insurance' => 'Universal Life Insurance',
-                                    'Term to 100 Life Insurance' => 'Term to 100 Life Insurance',
-                                    'No Medical Exam Life Insurance' => 'No Medical Exam Life Insurance',
-                                    'Guaranteed Issue Life Insurance' => 'Guaranteed Issue Life Insurance',
-                                    'Hard to Insure Life Insurance' => 'Hard to Insure Life Insurance',
-                                    'Final Expense Insurance' => 'Final Expense Insurance',
-                                    'Life Insurance on Children' => 'Life Insurance on Children',
-                                    'Life Insurance on Seniors' => 'Life Insurance on Seniors',
-                                    'Key Person Life Insurance' => 'Key Person Life Insurance',
-                                    'Corporate-Owned Insurance' => 'Corporate-Owned Insurance',
-                                    'Shareholder/Partner Insurance' => 'Shareholder/Partner Insurance',
-                                    'Buy/Sell Agreement Insurance' => 'Buy/Sell Agreement Insurance',
-                                    'Whole Life for Business Owners' => 'Whole Life for Business Owners',
-                                    'Whole Life for High Net Worth' => 'Whole Life for High Net Worth',
-                                    'Whole Life for Estate Planning' => 'Whole Life for Estate Planning'
-                                ])
-                                ->searchable()
-                                ->required(),
-                            Select::make('province_territory')
-                                ->label('Province/Territory')
-                                ->options([
-                                    // PH locations
-                                    'NCR' => 'NCR (National Capital Region)',
-                                    'CAR' => 'CAR (Cordillera Administrative Region)',
-                                    'Region I' => 'Region I (Ilocos Region)',
-                                    'Region II' => 'Region II (Cagayan Valley)',
-                                    'Region III' => 'Region III (Central Luzon)',
-                                    'Region IV-A' => 'Region IV-A (CALABARZON)',
-                                    'Region IV-B' => 'Region IV-B (MIMAROPA)',
-                                    'Region V' => 'Region V (Bicol Region)',
-                                    'Region VI' => 'Region VI (Western Visayas)',
-                                    'Region VII' => 'Region VII (Central Visayas)',
-                                    'Region VIII' => 'Region VIII (Eastern Visayas)',
-                                    'Region IX' => 'Region IX (Zamboanga Peninsula)',
-                                    'Region X' => 'Region X (Northern Mindanao)',
-                                    'Region XI' => 'Region XI (Davao Region)',
-                                    'Region XII' => 'Region XII (SOCCSKSARGEN)',
-                                    'Region XIII' => 'Region XIII (Caraga)',
-                                    'BARMM' => 'BARMM (Bangsamoro Autonomous Region in Muslim Mindanao)',
-                                ])
-                                ->searchable()
-                                ->required(),
-                        ]),
-                    Step::make('Personal Info')
-                        ->schema([
-                            DatePicker::make('birthdate')
-                                ->label('Birth date')
-                                ->required()
-                                ->displayFormat('F j, Y')
-                                ->maxDate('today'),
-                            Radio::make('sex')
-                                ->label('Sex')
-                                ->options(['Male' => 'Male', 'Female' => 'Female'])
-                                ->required(),
-                            Select::make('desired_amount')
-                                ->label('Desired Amount')
-                                ->options([
-                                    50000 => '$50,000',
-                                    100000 => '$100,000',
-                                    150000 => '$150,000',
-                                    200000 => '$200,000',
-                                    250000 => '$250,000',
-                                    300000 => '$300,000',
-                                    400000 => '$400,000',
-                                    500000 => '$500,000',
-                                    600000 => '$600,000',
-                                    700000 => '$700,000',
-                                    800000 => '$800,000',
-                                    900000 => '$900,000',
-                                    1000000 => '$1,000,000',
-                                    1250000 => '$1,250,000'
-                                ])
-                                ->required()
-                                ->visible(fn($get) => !in_array($get('insurance_type'), [
-                                    'Corporate-Owned Insurance',
-                                    'Shareholder/Partner Insurance',
-                                    'Buy/Sell Agreement Insurance'
-                                ])),
-                            Select::make('length_coverage')
-                                ->label('Length of Coverage')
-                                ->options([
-                                    '10' => '10 years',
-                                    '15' => '15 years',
-                                    '20' => '20 years',
-                                    '25' => '25 years',
-                                    '30' => '30 years'
-                                ])
-                                ->required()
-                                ->visible(fn($get) => $get('insurance_type') === 'Term Life Insurance'),
-                            Select::make('mortgage_amortization')
-                                ->label('Mortgage Amortization')
-                                ->options([
-                                    '10' => '10 years or less',
-                                    '15' => '15 years or less',
-                                    '20' => '20 years or less',
-                                    '25' => '25 years or less',
-                                    '30' => '30 years or less',
-                                    '35' => '35 years or greater'
-                                ])
-                                ->visible(fn($get) => $get('insurance_type') === 'Mortgage Protection Insurance'),
-                            Select::make('length_payment')
-                                ->label('Length of Payment')
-                                ->options([
-                                    '10 years' => '10 years',
-                                    '15 years' => '15 years',
-                                    '20 years' => '20 years',
-                                    'Pay to age 65' => 'Pay to age 65',
-                                    'Life Pay' => 'Life Pay'
-                                ])
-                                ->visible(fn($get) => in_array($get('insurance_type'), [
-                                    'Whole Life Insurance',
-                                    'Universal Life Insurance',
-                                    'No Medical Exam Life Insurance',
-                                    'Guaranteed Issue Life Insurance',
-                                    'Hard to Insure Life Insurance',
-                                    'Life Insurance on Children',
-                                    'Key Person Life Insurance'
-                                ])),
-                            Radio::make('health_class')
-                                ->label('Health class')
-                                ->options(['Average' => 'Average', 'Good' => 'Good', 'Excellent'])
-                                ->visible(fn($get) => !in_array($get('insurance_type'), [
-                                    'Guaranteed Issue Life Insurance',
-                                    'No Medical Exam Life Insurance'
-                                ])),
-                            Radio::make('tobacco_use')
-                                ->label('Nicotine/Tobaco use')
-                                ->options([
-                                    false => 'No, I do not smoke',
-                                    true => 'Yes, I am a smoker'
-                                ])
-                                ->required(),
-                            Select::make('journey')
-                                ->label('Your Journey')
-                                ->options([
-                                    'Still deciding if I need insurance' => 'Still deciding if I need insurance',
-                                    'Doing research to find quotes' => 'Doing research to find quotes',
-                                    'Ready to get covered soon' => 'Ready to get covered soon',
-                                    'Want to get covered right away' => 'Want to get covered right away',
-                                ])
-                                ->required(),
-                        ]),
-                    Step::make('Contact Info')
-                        ->schema([
-                            TextInput::make('first_name')->label('First Name')->required(),
-                            TextInput::make('last_name')->label('Last Name')->required(),
-                            TextInput::make('mobile_number')
-                                ->label('Mobile Number')
-                                ->tel()
-                                ->hint('Format: +639XXXXXXXXX')
-                                // PH format
-                                ->telRegex('/^\+639\d{9}$/')
-                                ->required(),
-                            TextInput::make('email')
-                                ->label('Email')
-                                ->email()
-                                ->required(),
-                        ]),
-                ])
-                    ->submitAction(new HtmlString(Blade::render(
-                        <<<BLADE
-                    <x-filament::button
-                        type="submit"
-                        size="sm"
-                    >
-                        Submit
-                    </x-filament::button>
-                    BLADE
-                    ))),
-                Placeholder::make("Agreement")->hiddenLabel()->content(new HtmlString(Blade::render(
-                    <<<BLADE
-                        <div class="mt-4 text-sm text-justify text-gray-600 max-w-lg">
-                        By clicking "Submit Quote" you grant "Leads CRM+" expressed written consent that we may contact
-                        you to discuss your insurance options. This does not constitute an insurance application. You are under no obligation to purchase a policy. We respect your privacy, and the information provided will never be shared
-                        with anyone.
-                        </div>
-                    BLADE
-                ))),
+                Select::make('insurance_type')
+                    ->label('Life Insurance Quotes')
+                    ->options([
+                        'Term Life Insurance' => 'Term Life Insurance (popular)',
+                        'Mortgage Protection Insurance' => 'Mortgage Protection Insurance',
+                        'Whole Life Insurance' => 'Whole Life Insurance',
+                        'Universal Life Insurance' => 'Universal Life Insurance',
+                        'Term to 100 Life Insurance' => 'Term to 100 Life Insurance',
+                        'No Medical Exam Life Insurance' => 'No Medical Exam Life Insurance',
+                        'Guaranteed Issue Life Insurance' => 'Guaranteed Issue Life Insurance',
+                        'Hard to Insure Life Insurance' => 'Hard to Insure Life Insurance',
+                        'Final Expense Insurance' => 'Final Expense Insurance',
+                        'Life Insurance on Children' => 'Life Insurance on Children',
+                        'Life Insurance on Seniors' => 'Life Insurance on Seniors',
+                        'Key Person Life Insurance' => 'Key Person Life Insurance',
+                        'Corporate-Owned Insurance' => 'Corporate-Owned Insurance',
+                        'Shareholder/Partner Insurance' => 'Shareholder/Partner Insurance',
+                        'Buy/Sell Agreement Insurance' => 'Buy/Sell Agreement Insurance',
+                        'Whole Life for Business Owners' => 'Whole Life for Business Owners',
+                        'Whole Life for High Net Worth' => 'Whole Life for High Net Worth',
+                        'Whole Life for Estate Planning' => 'Whole Life for Estate Planning'
+                    ])
+                    ->searchable()
+                    ->required(),
+                Select::make('province_territory')
+                    ->label('Province/Territory')
+                    ->options([
+                        // PH locations
+                        'NCR' => 'NCR (National Capital Region)',
+                        'CAR' => 'CAR (Cordillera Administrative Region)',
+                        'Region I' => 'Region I (Ilocos Region)',
+                        'Region II' => 'Region II (Cagayan Valley)',
+                        'Region III' => 'Region III (Central Luzon)',
+                        'Region IV-A' => 'Region IV-A (CALABARZON)',
+                        'Region IV-B' => 'Region IV-B (MIMAROPA)',
+                        'Region V' => 'Region V (Bicol Region)',
+                        'Region VI' => 'Region VI (Western Visayas)',
+                        'Region VII' => 'Region VII (Central Visayas)',
+                        'Region VIII' => 'Region VIII (Eastern Visayas)',
+                        'Region IX' => 'Region IX (Zamboanga Peninsula)',
+                        'Region X' => 'Region X (Northern Mindanao)',
+                        'Region XI' => 'Region XI (Davao Region)',
+                        'Region XII' => 'Region XII (SOCCSKSARGEN)',
+                        'Region XIII' => 'Region XIII (Caraga)',
+                        'BARMM' => 'BARMM (Bangsamoro Autonomous Region in Muslim Mindanao)',
+                    ])
+                    ->searchable()
+                    ->required(),
+                DatePicker::make('birthdate')
+                    ->label('Birth date')
+                    ->required()
+                    ->displayFormat('F j, Y')
+                    ->maxDate('today'),
+                Radio::make('sex')
+                    ->label('Sex')
+                    ->options(['Male' => 'Male', 'Female' => 'Female'])
+                    ->required(),
+                // desired amount as text input
+                TextInput::make('desired_amount')
+                    ->label('Desired Amount')
+                    ->numeric()
+                    ->minValue(50000)
+                    ->maxValue(1250000)
+                    ->step(50000)
+                    ->required()
+                    ->visible(fn($get) => in_array($get('insurance_type'), [
+                        'Corporate-Owned Insurance',
+                        'Shareholder/Partner Insurance',
+                        'Buy/Sell Agreement Insurance'
+                    ])),
+                Select::make('length_coverage')
+                    ->label('Length of Coverage')
+                    ->options([
+                        '10' => '10 years',
+                        '15' => '15 years',
+                        '20' => '20 years',
+                        '25' => '25 years',
+                        '30' => '30 years'
+                    ])
+                    ->required()
+                    ->visible(fn($get) => $get('insurance_type') === 'Term Life Insurance'),
+                Select::make('mortgage_amortization')
+                    ->label('Mortgage Amortization')
+                    ->options([
+                        '10' => '10 years or less',
+                        '15' => '15 years or less',
+                        '20' => '20 years or less',
+                        '25' => '25 years or less',
+                        '30' => '30 years or less',
+                        '35' => '35 years or greater'
+                    ])
+                    ->visible(fn($get) => $get('insurance_type') === 'Mortgage Protection Insurance'),
+                Select::make('length_payment')
+                    ->label('Length of Payment')
+                    ->options([
+                        '10 years' => '10 years',
+                        '15 years' => '15 years',
+                        '20 years' => '20 years',
+                        'Pay to age 65' => 'Pay to age 65',
+                        'Life Pay' => 'Life Pay'
+                    ])
+                    ->visible(fn($get) => in_array($get('insurance_type'), [
+                        'Whole Life Insurance',
+                        'Universal Life Insurance',
+                        'No Medical Exam Life Insurance',
+                        'Guaranteed Issue Life Insurance',
+                        'Hard to Insure Life Insurance',
+                        'Life Insurance on Children',
+                        'Key Person Life Insurance'
+                    ])),
+                Radio::make('health_class')
+                    ->label('Health class')
+                    ->options(['Average' => 'Average', 'Good' => 'Good', 'Excellent'])
+                    ->visible(fn($get) => !in_array($get('insurance_type'), [
+                        'Guaranteed Issue Life Insurance',
+                        'No Medical Exam Life Insurance'
+                    ])),
+                Radio::make('tobacco_use')
+                    ->label('Nicotine/Tobaco use')
+                    ->options([
+                        'false' => 'No, I do not smoke',
+                        'true' => 'Yes, I am a smoker',
+                    ])
+                    ->required(),
+                Select::make('journey')
+                    ->label('Your Journey')
+                    ->options([
+                        'Still deciding if I need insurance' => 'Still deciding if I need insurance',
+                        'Doing research to find quotes' => 'Doing research to find quotes',
+                        'Ready to get covered soon' => 'Ready to get covered soon',
+                        'Want to get covered right away' => 'Want to get covered right away',
+                    ])
+                    ->required(),
+                TextInput::make('first_name')->label('First Name')->required(),
+                TextInput::make('last_name')->label('Last Name')->required(),
+                TextInput::make('mobile_number')
+                    ->label('Mobile Number')
+                    ->tel()
+                    ->hint('Format: +639XXXXXXXXX')
+                    // PH format
+                    ->telRegex('/^\+639\d{9}$/')
+                    ->required(),
+                TextInput::make('email')
+                    ->label('Email')
+                    ->email()
+                    ->required(),
+                // Placeholder::make("Agreement")->hiddenLabel()->content(new HtmlString(Blade::render(
+                //     <<<BLADE
+                //         <div class="mt-4 text-sm text-justify text-gray-600 max-w-lg">
+                //         By clicking "Submit Quote" you grant "Leads CRM+" expressed written consent that we may contact
+                //         you to discuss your insurance options. This does not constitute an insurance application. You are under no obligation to purchase a policy. We respect your privacy, and the information provided will never be shared
+                //         with anyone.
+                //         </div>
+                //     BLADE
+                // ))),
             ]);
     }
 
@@ -240,7 +208,7 @@ class LeadResource extends Resource
                 Tables\Columns\TextColumn::make('latestAssignment.user.name')
                     ->label('Assigned To')
                     ->sortable(['first_name', 'last_name'])
-                    ->visible(fn (Table $table): bool => ($table->getFilter('assignment_status')?->getState()['value'] ?? null) !== 'unassigned'),
+                    ->visible(fn(Table $table): bool => ($table->getFilter('assignment_status')?->getState()['value'] ?? null) !== 'unassigned'),
 
                 Tables\Columns\TextColumn::make('latestAssignment.status')
                     ->label('Status')
@@ -260,23 +228,25 @@ class LeadResource extends Resource
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('assignment_status')
-                    ->options(function() {
+                    ->options(function () {
                         $options = [
                             'to call' => 'To Call',
                             'success' => 'Success',
                             'failed' => 'Failed',
                         ];
-                        
+
                         if (auth()->user()->is_admin) {
                             $options = ['unassigned' => 'Unassigned'] + $options;
                         }
-                        
+
                         return $options;
                     })
                     ->query(function (Builder $query, array $data) {
                         return match ($data['value']) {
                             'unassigned' => $query->doesntHave('leadAssignments'),
-                            'to call', 'success', 'failed' => $query->whereHas('latestAssignment', fn ($q) => 
+                            'to call', 'success', 'failed' => $query->whereHas(
+                                'latestAssignment',
+                                fn($q) =>
                                 $q->where('status', $data['value'])
                             ),
                             default => $query
@@ -288,8 +258,8 @@ class LeadResource extends Resource
                     ->label('Assign')
                     ->color('success')
                     ->icon('heroicon-m-user-plus')
-                    ->url(fn (Lead $record): string => route('filament.admin.resources.lead-assignments.create', ['lead_id' => $record->id]))
-                    ->visible(fn (Lead $record): bool => $record->leadAssignments->isEmpty()),
+                    ->url(fn(Lead $record): string => route('filament.admin.resources.lead-assignments.create', ['lead_id' => $record->id]))
+                    ->visible(fn(Lead $record): bool => $record->leadAssignments->isEmpty()),
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
             ])
@@ -325,7 +295,7 @@ class LeadResource extends Resource
     public static function getEloquentQuery(): Builder
     {
         $query = parent::getEloquentQuery();
-        
+
         if (!auth()->user()->is_admin) {
             $query->forUser(auth()->id());
         }
